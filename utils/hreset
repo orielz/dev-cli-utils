@@ -1,0 +1,8 @@
+params="$@"
+currentBranch=$(git status | head -n 1 | cut -d ' ' -f 3)
+if [ -z "$1" ]; then
+    git reset --hard origin/$currentBranch
+else
+    git reset --hard $1
+fi
+

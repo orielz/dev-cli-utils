@@ -1,0 +1,29 @@
+
+#!/bin/bash
+
+echo "Fetching all..."
+git fetch --all
+
+currentBranch=$(git status | head -n 1 | cut -d ' ' -f 3)
+targetBranch=$1
+sourceBranch=$2
+
+if [ "$sourceBranch" != "$currentBranch" ]; then
+    git status | grep -q 'nothing to commit, working tree clean'
+    if [ "$?" -ne 0 ]; then
+        echo "Current branch ($currentBranch) is different from source branch ($sourceBranch)"
+        echo "There are uncommited files, cannot navigate to source branch."
+        exit 1
+    fi
+
+    git checkout $sourceBranch
+    if [ "$?" -eq 0 ]; then
+        git pull origin $sourceBranch
+    fi
+
+    git checkout $targetBranch
+    if [ "$?" -eq 0 ]; then
+        git pull origin $targetBranch
+        git rebase $sourceBranch
+    fi
+fi

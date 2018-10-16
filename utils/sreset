@@ -1,0 +1,2 @@
+git reset --soft $1
+
