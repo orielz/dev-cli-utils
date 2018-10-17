@@ -3,25 +3,26 @@
 
 repo_name=$(sed -n '2p' package.json | cut -d ':' -f 2 | sed 's/\,//g' | sed 's/\ //g' | sed 's/\"//g')
 echo "$repo_name"
+currentBranch=$(git status | head -n 1 | cut -d ' ' -f 3)
 
 if [ -z "$repo_name" ]; then
     echo "Running all"
-    cd ~/dev/seebo_react && git pull origin ci-qa && yarn install && yarn serve-dev &
-    cd ~/dev/seebo_users_management && git pull origin ci-qa && npm install && npm start &
+    cd ~/dev/seebo_react && git pull origin $currentBranch && yarn install && yarn serve-dev &
+    cd ~/dev/seebo_users_management && git pull origin $currentBranch && npm install && npm start &
     cd ~/dev/seebo-catalog && pull && npm install && npm start &
-    cd ~/dev/seebo_projects_service && git pull origin ci-qa && npm install && npm start &
-    cd ~/dev/seebo_platform && git pull origin ci-qa && npm install && npm run fe & npm run be &
-    cd ~/dev/seebo-external-gateway && git pull origin ci-qa && npm install && npm start &
-    cd ~/dev/seebo_backoffice && git pull origin ci-qa && npm install && npm start &
-    cd ~/dev/analytics-service && git pull origin ci-qa && npm install && npm start
+    cd ~/dev/seebo_projects_service && git pull origin $currentBranch && npm install && npm start &
+    cd ~/dev/seebo_platform && git pull origin $currentBranch && npm install && npm run fe & npm run be &
+    cd ~/dev/seebo-external-gateway && git pull origin $currentBranch && npm install && npm start &
+    cd ~/dev/seebo_backoffice && git pull origin $currentBranch && npm install && npm start &
+    cd ~/dev/analytics-service && git pull origin $currentBranch && npm install && npm start
 fi
 
 if [ "seebo-react" = $repo_name ]; then
-    cd ~/dev/seebo_react && git pull origin ci-qa && yarn install && yarn serve-dev
+    cd ~/dev/seebo_react && git pull origin $currentBranch && yarn install && yarn serve-dev
 fi
 
 if [ "seebo-user-management" = $repo_name ]; then
-    cd ~/dev/seebo_users_management && git pull origin ci-qa && npm install && npm start
+    cd ~/dev/seebo_users_management && git pull origin $currentBranch && npm install && npm start
 fi
 
 if [ "seebo-catalog" = $repo_name ]; then
@@ -29,21 +30,21 @@ if [ "seebo-catalog" = $repo_name ]; then
 fi
 
 if [ "seebo_projects" = $repo_name ]; then
-    cd ~/dev/seebo_projects_service && git pull origin ci-qa && npm install && npm start
+    cd ~/dev/seebo_projects_service && git pull origin $currentBranch && npm install && npm start
 fi
 
 if [ "seebo-studio" = $repo_name ]; then
-    cd ~/dev/seebo_platform && git pull origin ci-qa && npm install && npm run fe & npm run be && npm run test:watch
+    cd ~/dev/seebo_platform && git pull origin $currentBranch && npm install && npm run fe & npm run be && npm run test:watch
 fi
 
 if [ "seebo-external-gateway" = $repo_name ]; then
-    cd ~/dev/seebo-external-gateway && git pull origin ci-qa && npm install && npm start
+    cd ~/dev/seebo-external-gateway && git pull origin $currentBranch && npm install && npm start
 fi
 
 if [ "seebo-backoffice" = $repo_name ]; then
-    cd ~/dev/seebo_backoffice && git pull origin ci-qa && npm install && npm start
+    cd ~/dev/seebo_backoffice && git pull origin $currentBranch && npm install && npm start
 fi
 
 if [ "@seebo/analytics-service" = $repo_name ]; then
-    cd ~/dev/analytics-service && git pull origin ci-qa && npm install && npm start
+    cd ~/dev/analytics-service && git pull origin $currentBranch && npm install && npm start
 fi

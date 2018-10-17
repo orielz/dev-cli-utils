@@ -1,7 +1,8 @@
-utils_dir="cli-utils"
+utils_dir="dev-cli-utils"
 bash_file=~/.bash_profile
 utils_path=/usr/local/bin/$utils_dir
 
+rm -rf /usr/local/bin/$utils_dir
 mkdir -p /usr/local/bin/$utils_dir
 grep -Rq $utils_dir $bash_file
 
@@ -11,4 +12,4 @@ if [ "$?" -eq 1 ]; then
 fi
 
 cp $PWD/utils/* $utils_path
-ls $utils_path
+find $utils_path -type f -exec chmod 777 {} \;
