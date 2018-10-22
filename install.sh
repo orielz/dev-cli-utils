@@ -2,6 +2,8 @@ utils_dir="dev-cli-utils"
 bash_file=~/.bash_profile
 utils_path=/usr/local/bin/$utils_dir
 
+npm install ttab -g
+
 rm -rf /usr/local/bin/$utils_dir
 mkdir -p /usr/local/bin/$utils_dir
 grep -Rq $utils_dir $bash_file

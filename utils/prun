@@ -7,14 +7,14 @@ currentBranch=$(git status | head -n 1 | cut -d ' ' -f 3)
 
 if [ -z "$repo_name" ]; then
     echo "Running all"
-    cd ~/dev/seebo_react && git pull origin $currentBranch && yarn install && yarn serve-dev &
-    cd ~/dev/seebo_users_management && git pull origin $currentBranch && npm install && npm start &
-    cd ~/dev/seebo-catalog && pull && npm install && npm start &
-    cd ~/dev/seebo_projects_service && git pull origin $currentBranch && npm install && npm start &
-    cd ~/dev/seebo_platform && git pull origin $currentBranch && npm install && npm run fe & npm run be &
-    cd ~/dev/seebo-external-gateway && git pull origin $currentBranch && npm install && npm start &
-    cd ~/dev/seebo_backoffice && git pull origin $currentBranch && npm install && npm start &
-    cd ~/dev/analytics-service && git pull origin $currentBranch && npm install && npm start
+    ttab -a iTerm2 -d ~/dev/seebo_react -t 'react' 'git pull origin $currentBranch && yarn install && yarn serve-dev'
+    ttab -a iTerm2 -d ~/dev/seebo_users_management -t 'users_management' 'git pull origin $currentBranch && npm install && npm start'
+    ttab -a iTerm2 -d ~/dev/seebo-catalog -t 'catalog' 'pull && npm install && npm start'
+    ttab -a iTerm2 -d ~/dev/seebo_projects_service -t 'projects' 'git pull origin $currentBranch && npm install && npm start'
+    ttab -a iTerm2 -d ~/dev/seebo_platform -t 'projects' 'git pull origin $currentBranch && npm install && npm run fe & npm run be'
+    ttab -a iTerm2 -d ~/dev/seebo-external-gateway -t 'external-gw' 'git pull origin $currentBranch && npm install && npm start'
+    ttab -a iTerm2 -d ~/dev/seebo_backoffice -t 'backoffice' 'git pull origin $currentBranch && npm install && npm start'
+    ttab -a iTerm2 -d ~/dev/analytics-service -t 'analytics-service' 'git pull origin $currentBranch && npm install && npm start'
 fi
 
 if [ "seebo-react" = $repo_name ]; then
