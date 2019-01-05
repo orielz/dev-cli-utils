@@ -7,44 +7,14 @@ currentBranch=$(git status | head -n 1 | cut -d ' ' -f 3)
 
 if [ -z "$repo_name" ]; then
     echo "Running all"
-    ttab -a iTerm2 -d ~/dev/seebo_react -t 'react' 'git pull origin $currentBranch && yarn install && yarn serve-dev'
-    ttab -a iTerm2 -d ~/dev/seebo_users_management -t 'users_management' 'git pull origin $currentBranch && npm install && npm start'
-    ttab -a iTerm2 -d ~/dev/seebo-catalog -t 'catalog' 'pull && npm install && npm start'
-    ttab -a iTerm2 -d ~/dev/seebo_projects_service -t 'projects' 'git pull origin $currentBranch && npm install && npm start'
-    ttab -a iTerm2 -d ~/dev/seebo_platform -t 'projects' 'git pull origin $currentBranch && npm install && npm run fe & npm run be'
-    ttab -a iTerm2 -d ~/dev/seebo-external-gateway -t 'external-gw' 'git pull origin $currentBranch && npm install && npm start'
-    ttab -a iTerm2 -d ~/dev/seebo_backoffice -t 'backoffice' 'git pull origin $currentBranch && npm install && npm start'
-    ttab -a iTerm2 -d ~/dev/analytics-service -t 'analytics-service' 'git pull origin $currentBranch && npm install && npm start'
+    ttab -a iTerm2 -d ~/repos/linweb -t 'linweb' 'git pull origin $currentBranch && npm install && npm start'
+    ttab -a iTerm2 -d ~/repos/linrest -t 'linrest' 'git pull origin $currentBranch && npm install && npm start'
 fi
 
-if [ "seebo-react" = $repo_name ]; then
-    cd ~/dev/seebo_react && git pull origin $currentBranch && yarn install && yarn serve-dev
+if [ "linweb" = $repo_name ]; then
+    cd ~/dev/linweb && git pull origin $currentBranch && npm install && npm start
 fi
 
-if [ "seebo-user-management" = $repo_name ]; then
-    cd ~/dev/seebo_users_management && git pull origin $currentBranch && npm install && npm start
-fi
-
-if [ "seebo-catalog" = $repo_name ]; then
-    cd ~/dev/seebo-catalog && pull && npm install && npm start
-fi
-
-if [ "seebo_projects" = $repo_name ]; then
-    cd ~/dev/seebo_projects_service && git pull origin $currentBranch && npm install && npm start
-fi
-
-if [ "seebo-studio" = $repo_name ]; then
-    cd ~/dev/seebo_platform && git pull origin $currentBranch && npm install && npm run fe & npm run be && npm run test:watch
-fi
-
-if [ "seebo-external-gateway" = $repo_name ]; then
-    cd ~/dev/seebo-external-gateway && git pull origin $currentBranch && npm install && npm start
-fi
-
-if [ "seebo-backoffice" = $repo_name ]; then
-    cd ~/dev/seebo_backoffice && git pull origin $currentBranch && npm install && npm start
-fi
-
-if [ "@seebo/analytics-service" = $repo_name ]; then
-    cd ~/dev/analytics-service && git pull origin $currentBranch && npm install && npm start
+if [ "linrest" = $repo_name ]; then
+    cd ~/dev/linrest && pull && npm install && npm start
 fi
