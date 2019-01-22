@@ -1,0 +1,6 @@
+
+#!/bin/bash
+params="$@"
+echo $params
+git add .
+git commit -m $@
