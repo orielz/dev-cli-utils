@@ -1,0 +1,10 @@
+#!/bin/bash
+
+targetBranch=$1
+
+if [ -z "$2" ]; then
+    git branch -d $targetBranch
+else
+    git branch -d $targetBranch
+    git push origin --delete $targetBranch
+fi
