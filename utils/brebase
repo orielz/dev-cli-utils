@@ -8,6 +8,10 @@ currentBranch=$(git status | head -n 1 | cut -d ' ' -f 3)
 targetBranch=$1
 sourceBranch=$2
 
+if [ "$targetBranch" = "." ]; then
+    targetBranch=$currentBranch
+fi
+
 if [ "$sourceBranch" != "$currentBranch" ]; then
     git status | grep -q 'nothing to commit, working tree clean'
     if [ "$?" -ne 0 ]; then
