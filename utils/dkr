@@ -1,0 +1,57 @@
+#!/bin/bash
+command=$1
+
+if test -f dev.docker-compose.yml
+then
+  compose_file=dev.docker-compose.yml
+elif test -f docker-compose.yml
+then
+  compose_file=docker-compose.yml
+else
+  echo 'no docker-compose file found.'
+  exit
+fi
+
+container_name=$(cat $compose_file | grep container_name | awk '{print $2}')
+image_name=$(docker image ls | grep $container_name | awk '{print $1}')
+
+if [ "$command" == "hardreset" ]; then
+    
+    if [[ ! -z "$container_name" ]]; then
+        docker stop $container_name
+        docker rm $container_name
+    fi
+   
+    if [[ ! -z "$image_name" ]]; then
+        docker rmi $image_name
+    fi
+    
+    docker-compose -f $compose_file up
+fi
+
+if [ "$command" == "stop" ]; then
+    if [[ ! -z "$container_name" ]]; then
+        docker stop $container_name
+    fi
+fi
+
+if [ "$command" == "rm" ]; then
+    if [[ ! -z "$container_name" ]]; then
+        docker stop $container_name
+        docker rm $container_name
+    fi
+fi
+
+if [ "$command" == "rmi" ]; then
+    if [[ ! -z "$container_name" ]]; then
+        docker stop $container_name
+        docker rm $container_name
+    fi
+    if [[ ! -z "$image_name" ]]; then
+        docker rmi $image_name
+    fi
+fi
+
+if [ "$command" == "start" ]; then
+    docker-compose -f $compose_file up
+fi
