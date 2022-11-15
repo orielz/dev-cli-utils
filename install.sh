@@ -1,4 +1,4 @@
-utils_dir="dev-cli-utils"
+utils_dir="dev-cli-utilss"
 bash_file=~/.zshrc
 utils_path=/usr/local/bin/$utils_dir
 
