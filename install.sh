@@ -1,6 +1,6 @@
 utils_dir="dev-cli-utils"
 bash_file=~/.zshrc
-utils_path=/usr/local/bin/$utils_dir
+utils_path=/usr/local/bin/$utils_dirs
 
 npm install ttab -g
 
