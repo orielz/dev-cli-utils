@@ -4,7 +4,7 @@ utils_path=/usr/local/bin/$utils_dir
 
 npm install ttab -g
 
-rm -rf /usr/local/bin/$utils_dir
+rm -rf /usr/local/bin/$utils_dirz
 mkdir -p /usr/local/bin/$utils_dir
 grep -Rq $utils_dir $bash_file
 
