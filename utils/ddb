@@ -1,0 +1,43 @@
+#!/bin/bash
+
+if [[ $# -ne 1 ]]; then
+    echo "name of dev environment must be provided. i.e - dev-01...."
+    exit 1
+fi
+
+env=$1
+
+if [[ ${env} == "dev-01" ]]; then
+    arn="lineardb.cda97htavp9s.eu-central-1.rds.amazonaws.com"
+    bastion_ip="bastion.linearb-dev-01.io"
+elif [[ ${env} == "dev-02" ]]; then
+    arn="lineardb.c13eq2kkd5cg.eu-west-1.rds.amazonaws.com"
+    bastion_ip="bastion.linearb-dev-02.io"
+elif [[ ${env} == "dev-03" ]]; then
+    arn="lineardb.cvtzifoit9ka.eu-west-3.rds.amazonaws.com"
+    bastion_ip="bastion.linearb-dev-03.io"
+elif [[ ${env} == "staging-01" ]]; then
+    arn="lineardb.c0bmjxmpkxr9.eu-west-2.rds.amazonaws.com"
+    bastion_ip="bastion.linearb-staging-01.io"
+else
+    echo "unsupported env ${env}!"; exit 1
+fi
+
+echo 'retrieving DB PW from secrets manager'
+DEV_PW=$(aws secretsmanager get-secret-value --profile linearb-"${env}" --secret-id default/DB | jq '.["SecretString"] | fromjson' | jq -r 'to_entries[1]|"\(.value)"')
+
+# echo 'opening ssh tunnel'
+ssh -f -o IdentitiesOnly=yes -o ExitOnForwardFailure=yes -i ~/.ssh/dev_bastion_key.pem -N -L 5500:"${arn}":5432 ec2-user@"${bastion_ip}"
+
+if [ $? -eq 0 ]; then
+    echo "SSH opened successfully"
+else
+    echo "SSH failed"
+    exit 1
+fi
+
+PGPASSWORD=${DEV_PW} psql -h localhost -p 5500 -U linearuser -d lineardb
+
+# echo "closing ssh tunnel"
+kill -9 "$(lsof -i:5500 -t)"
+
