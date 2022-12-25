@@ -6,5 +6,10 @@ automations:
       - action: add-comment@v1
         args: 
           comment: |
-            Please contact a member of `ui-team` team if you need to make changes to files in `src/views/yo`
+            First comment
           pin_uid: pinid123
+      - action: add-comment@v1
+        args: 
+          comment: |
+            Second comment
+          pin_uid: pinid456
