@@ -7,3 +7,4 @@ automations:
         args: 
           comment: |
             Please contact a member of `ui-team` team if you need to make changes to files in `src/views`
+          pin: false
