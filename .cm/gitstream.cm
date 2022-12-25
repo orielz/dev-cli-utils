@@ -7,7 +7,6 @@ automations:
         args: 
           comment: |
             First comment
-          pin_uid: pinid123
       - action: add-comment@v1
         args: 
           comment: |
