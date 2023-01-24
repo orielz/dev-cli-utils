@@ -1,14 +1,15 @@
 automations:
-  close_ui_changes_by_non_ui:
+  estimated_time_to_review:
     if:
       - true
     run:
-      - action: add-comment@v1
-        args: 
-          comment: |
-            First comment
-      - action: add-comment@v1
-        args: 
-          comment: |
-            Second comment
-          pin_uid: pinid456
+      - action: add-label@v1
+        args:
+          label: "{{ calc.etr }} min review"
+          color: {{ 'E94637' if (calc.etr >= 20) else ('FBBD10' if (calc.etr >= 5) else '36A853') }}
+
+# To simplify the automation, this calculation is placed under a unique YAML key.
+# The result is is assigned to `calc.etr` which is used in the automation above.
+# You can add as many keys as you like.
+calc:
+  etr: {{ branch | estimatedReviewTime }}
