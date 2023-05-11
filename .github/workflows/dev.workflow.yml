@@ -13,9 +13,26 @@ jobs:
         node-version: [16.x]
 
     steps:
-      - uses: actions/checkout@v2
+      - name: Get PR context
+        uses: actions/github-script@v3
+        id: get-pr-context
+        with:
+          github-token: ${{ secrets.CI_USER_GIT_TOKEN }}
+          script: |
+            const request = {
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: context.issue.number
+            }
+            core.info(`Getting PR #${request.pull_number} from ${request.owner}/${request.repo}`)
+            try {
+              const result = await github.pulls.get(request)
+              return result.data
+            } catch (err) {
+              core.setFailed(`Request failed with error ${err}`)
+            }
 
-      - name: Set Environment Variables #Environment means dev-01, dev-02, dev-03, staging
+      - name: Set Environment Variables
         env:
           GITHUB_COMMENT: ${{github.event.comment.body}}
         id: set-environment-variables
@@ -27,17 +44,36 @@ jobs:
             then
               env=$(echo $i | awk -F '=' '{print $2}')
             fi
+            # if [[ ${i} =~ ^branch\=.* ]]
+            # then
+            #   branch=$(echo $i | awk -F '=' '{print $2}')
+            # fi
           done
           echo "env: $env"
+          # echo "branch: $branch"
           echo "::set-output name=env::${env}"
+          # echo "::set-output name=branch::${branch}"
+
+      - uses: actions/checkout@v2
+        with:
+          ref: ${{ fromJSON(steps.get-pr-context.outputs.result).head.ref }}
+      - name: Use Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: 16.13.2
 
       - name: deploy to dev
         env:
           env: ${{steps.set-environment-variables.outputs.env}}
+          branch: ${{ fromJSON(steps.get-pr-context.outputs.result).head.ref }}
         run: |
+          echo "branch: $branch"
+          echo "env: $env"
           if [ -z "$env" ]
           then
-                echo "\$env is empty"
+                echo "Deploying to the main env"
+                npm run ci-deploy:dev
           else
-                echo "\$env is NOT empty"
+                echo "Deploying to developer env"
+                npm run ci-deploy:dev --name=$env
           fi
