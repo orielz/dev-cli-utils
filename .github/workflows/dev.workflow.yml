@@ -1,0 +1,57 @@
+name: Deploy to dev Workflow
+
+on:
+  issue_comment:
+    types: [created]
+
+jobs:
+  deploy-to-dev:
+    runs-on: ubuntu-latest
+    if: github.event.issue.pull_request && startsWith(github.event.comment.body, '/dev')
+    strategy:
+      matrix:
+        node-version: [16.x]
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Use Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: 16.13.2
+
+      - name: os setup
+        run: |
+          sudo apt update -y
+          sudo apt install curl
+          touch $NPMRC
+          curl -H "X-JFrog-Art-API: $ARTIFACTORY_API_KEY" https://linearb.jfrog.io/linearb/api/npm/npm-local/auth/linearb >> $NPMRC
+        env:
+          NPMRC: ".npmrc"
+          ARTIFACTORY_API_KEY: ${{ secrets.ARTIFACTORY_API_KEY }}
+
+      - name: Set Environment Variables #Environment means dev-01, dev-02, dev-03, staging
+        id: set-environment-variables
+        run: |
+          echo "GITHUB_COMMENT is: $GITHUB_COMMENT"
+          for i in $GITHUB_COMMENT
+          do
+            if [[ ${i} =~ ^env\=.* ]]
+            then
+              env=$(echo $i | awk -F '=' '{print $2}')
+            fi
+          done
+          echo "env: $env"
+          echo "::set-output name=env::${env}"
+
+      - name: deploy to dev
+        if: ${{ steps.set-environment-variables.outputs.env == "" }}
+        env:
+          env: ${{steps.set-environment-variables.outputs.env}}
+        run: echo "npm run ci-deploy:dev"
+
+      - name: deploy to dev
+        if: ${{ steps.set-environment-variables.outputs.env != "" }}
+        env:
+          env: ${{steps.set-environment-variables.outputs.env}}
+        run: echo "npm run ci-deploy:dev -- -name=$env"
