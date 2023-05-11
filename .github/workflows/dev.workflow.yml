@@ -15,22 +15,9 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Use Node.js
-        uses: actions/setup-node@v1
-        with:
-          node-version: 16.13.2
-
-      - name: os setup
-        run: |
-          sudo apt update -y
-          sudo apt install curl
-          touch $NPMRC
-          curl -H "X-JFrog-Art-API: $ARTIFACTORY_API_KEY" https://linearb.jfrog.io/linearb/api/npm/npm-local/auth/linearb >> $NPMRC
-        env:
-          NPMRC: ".npmrc"
-          ARTIFACTORY_API_KEY: ${{ secrets.ARTIFACTORY_API_KEY }}
-
       - name: Set Environment Variables #Environment means dev-01, dev-02, dev-03, staging
+        env:
+          GITHUB_COMMENT: ${{github.event.comment.body}}
         id: set-environment-variables
         run: |
           echo "GITHUB_COMMENT is: $GITHUB_COMMENT"
