@@ -48,10 +48,10 @@ jobs:
         if: ${{ steps.set-environment-variables.outputs.env == null }}
         env:
           env: ${{steps.set-environment-variables.outputs.env}}
-        run: echo "npm run ci-deploy:dev"
-
-      - name: deploy to dev
-        if: ${{ steps.set-environment-variables.outputs.env != "" }}
-        env:
-          env: ${{steps.set-environment-variables.outputs.env}}
-        run: echo "npm run ci-deploy:dev -- -name=$env"
+        run: |
+          if [ -z "$env" ]
+          then
+                echo "\$env is empty"
+          else
+                echo "\$env is NOT empty"
+          fi
