@@ -32,7 +32,6 @@ jobs:
           echo "::set-output name=env::${env}"
 
       - name: deploy to dev
-        if: ${{ steps.set-environment-variables.outputs.env == null }}
         env:
           env: ${{steps.set-environment-variables.outputs.env}}
         run: |
