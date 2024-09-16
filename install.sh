@@ -15,3 +15,4 @@ fi
 
 cp $PWD/utils/* $utils_path
 find $utils_path -type f -exec chmod 777 {} \;
+echo 1
